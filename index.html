@@ -1,1 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DishFT‑GNN — Future‑Aware Distillation GNN (Vishanth Reddy Bijjur)</title>
+  <meta name="description" content="Project page for DishFT‑GNN: daily correlation graphs, teacher–student distillation, Crew AI decisioning, and backtesting. Built by Vishanth Reddy Bijjur." />
+  <style>
+    :root {
+      --bg: #0b0c10;
+      --panel: #121318;
+      --text: #e6e6e6;
+      --muted: #9aa3af;
+      --accent: #79ffe1;
+      --accent-2: #7aa2ff;
+      --ok: #34d399;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+      --border: #22262e;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font: 15px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+    header { position: sticky; top: 0; backdrop-filter: blur(6px); background: rgba(11,12,16,0.75); border-bottom: 1px solid var(--border); z-index: 20; }
+    nav { display: flex; gap: 18px; align-items: center; padding: 12px 24px; overflow-x: auto; }
+    nav .brand { font-weight: 700; letter-spacing: 0.2px; }
+    .pill { border: 1px solid var(--border); padding: 6px 10px; border-radius: 999px; white-space: nowrap; }
+    .hero { padding: 28px 24px 12px; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, rgba(122,162,255,0.07), transparent 60%); }
+    .hero h1 { margin: 0 0 8px; font-size: 30px; letter-spacing: .2px; }
+    .grid { display: grid; gap: 16px; }
+    @media (min-width: 900px) { .grid.cols-2 { grid-template-columns: 1.2fr 1fr; } }
+    section { padding: 24px; border-bottom: 1px solid var(--border); }
+    h2 { margin: 0 0 10px; font-size: 22px; }
+    h3 { margin: 12px 0 6px; font-size: 16px; color: var(--muted); font-weight: 600; }
+    p { margin: 8px 0 12px; }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+    .kbd { padding: 2px 6px; border: 1px solid var(--border); border-radius: 6px; background: #0f1115; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: 12px; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    table { width: 100%; border-collapse: collapse; margin: 8px 0; }
+    th, td { border-bottom: 1px solid var(--border); padding: 10px 8px; text-align: left; }
+    th { font-weight: 600; color: var(--muted); }
+    tbody tr:hover { background: rgba(122,162,255,0.06); }
+    .tag { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; border: 1px solid var(--border); color: var(--muted); }
+    .tag.ok { color: #0f5132; background: #d1fae5; border-color: #86efac; }
+    .tag.warn { color: #7c2d12; background: #ffedd5; border-color: #fdba74; }
+    .tag.bad { color: #991b1b; background: #fee2e2; border-color: #fecaca; }
+    details { border: 1px dashed var(--border); border-radius: 12px; padding: 10px 12px; }
+    details > summary { cursor: pointer; user-select: none; font-weight: 600; }
+    figure { margin: 0; }
+    figcaption { color: var(--muted); font-size: 13px; margin-top: 6px; }
+    .muted { color: var(--muted); }
+    .right { text-align: right; }
+    .flex { display: flex; gap: 8px; align-items: center; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+    footer { padding: 24px; color: var(--muted); font-size: 13px; }
+    .note { font-size: 13px; color: var(--muted); }
+    .btn { display:inline-block; padding: 8px 10px; border: 1px solid var(--border); border-radius: 10px; }
+    .btn:hover { background: rgba(121,255,225,0.08); text-decoration: none; }
+    .grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 720px) { .grid.cols-3 { grid-template-columns: 1fr; } }
+    code { background: #0f1115; padding: 2px 6px; border: 1px solid var(--border); border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="container">
+      <div class="brand">DishFT‑GNN</div>
+      <a class="pill" href="#overview">Overview</a>
+      <a class="pill" href="#story">User Story</a>
+      <a class="pill" href="#sprints">Sprints</a>
+      <a class="pill" href="#commits">Commits</a>
+      <a class="pill" href="#evidence">Evidence</a>
+      <a class="pill" href="#appendix">Appendix</a>
+    </nav>
+  </header>
 
+  <div class="hero container">
+    <h1>Future‑Aware Distillation GNN for Daily Stock Trends</h1>
+    <p><strong>Author:</strong> Vishanth Reddy Bijjur</p>
+    <p class="card">This project builds daily correlation graphs from returns, trains a <em>teacher</em> GNN with a limited future window, distills it into a <em>student</em> GNN that only sees the past, and uses a Crew‑style decision agent to emit BUY/SELL/HOLD. I implemented the data/graph pipeline, teacher–student models with knowledge distillation, JSON inference, Crew AI decisioning, and a Backtrader evaluation harness.</p>
+    <div class="grid cols-2">
+      <div class="card">
+        <h3>Repo</h3>
+        <p><a href="https://github.com/Vishanth-reddy/Bijjur-AI-Agent-Stock-Prediction/tree/bijjur-sprint4" target="_blank" rel="noopener">Branch: <span class="mono">bijjur‑sprint4</span></a></p>
+        <p>Key modules: <span class="mono">src/UI/gnn.py</span> (pipeline + agents) and <span class="mono">src/Backtesting/gnn_backtest.py</span> (backtest).</p>
+      </div>
+      <div class="card">
+        <h3>Status</h3>
+        <p><span class="tag ok">End‑to‑end demo complete</span> • <span class="tag warn">Tuning ongoing</span></p>
+        <p class="note">Student inference meets latency target; pipeline handles missing/low‑vol periods; Crew agent returns valid recommendations.</p>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <section id="overview" class="grid cols-2">
+      <div class="card">
+        <h2>How it works</h2>
+        <ol>
+          <li><strong>Graph construction</strong>: compute N‑day rolling Pearson correlations over returns to form daily adjacency matrices.</li>
+          <li><strong>Teacher</strong>: a GCN→GRU classifier sees past + small future (t+Δ) to learn next‑day up/down logits.</li>
+          <li><strong>Student</strong>: same architecture but no future inputs; trained with KD loss (KL to teacher logits + CE to labels).</li>
+          <li><strong>Inference</strong>: with today’s graph + feature window, output <span class="mono">[{stock, student_prob}]</span>.</li>
+          <li><strong>Decisioning</strong>: Crew agent converts <span class="mono">student_prob</span> into <span class="mono">{"recommendation"}</span>.</li>
+          <li><strong>Backtesting</strong>: use daily recommendations in Backtrader to estimate Sharpe, returns, and drawdown.</li>
+        </ol>
+      </div>
+      <div class="card">
+        <h2>Agents</h2>
+        <ul>
+          <li><strong>PriceLoaderAgent</strong> — fetch OHLC, compute returns</li>
+          <li><strong>GraphBuilderAgent</strong> — rolling correlations → adjacency</li>
+          <li><strong>TeacherTrainAgent</strong> — temporal GNN with t+Δ</li>
+          <li><strong>StudentDistillAgent</strong> — KD(teacher, student) + CE</li>
+          <li><strong>InferenceAgent</strong> — emit <span class="mono">{stock, student_prob}</span></li>
+          <li><strong>DecisionAgent</strong> — BUY/SELL/HOLD from probability</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="story" class="card">
+      <h2>User Story (DishFT‑GNN)</h2>
+      <p><strong>Acceptance</strong>: daily adjacency tensors from rolling correlations; teacher converges on next‑day labels; student matches teacher logits and predicts labels; inference returns JSON; Crew agent outputs BUY/SELL/HOLD. <strong>Conditions</strong>: validated shapes/thresholds; clean training; robust to gaps/low‑vol; decisions consistently valid. <strong>DoD</strong>: loader, graph builder, teacher/student, inference JSON, Crew agent, and end‑to‑end test in place.</p>
+      <details>
+        <summary>Show detailed criteria</summary>
+        <ul>
+          <li>Graph Construction: rolling N‑day correlations → adjacency per date.</li>
+          <li>Teacher Training: past+future (t+Δ) embeddings, next‑day labels.</li>
+          <li>Student Distillation: KL(student‖teacher) + classification loss.</li>
+          <li>Inference Output: JSON schema <span class="mono">[{stock, student_prob}]</span>.</li>
+          <li>Crew AI Decisioning: returns <span class="mono">{"recommendation":"BUY|SELL|HOLD"}</span>.</li>
+        </ul>
+      </details>
+    </section>
+
+    <section id="sprints" class="card">
+      <h2>Sprint summary</h2>
+      <div class="note">Hours shown are estimated → actual. See Appendix for per‑task details.</div>
+      <table aria-label="Sprint Summary">
+        <thead>
+          <tr><th>Sprint</th><th>Objective</th><th>Key tasks</th><th class="right">Hours</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1</strong></td>
+            <td>MVP: data + returns</td>
+            <td>GNN.1 Price & Returns Ingestion</td>
+            <td class="right">8 → <strong>17</strong></td>
+          </tr>
+          <tr>
+            <td><strong>2</strong></td>
+            <td>Graphs + Teacher</td>
+            <td>GNN.2 Graph build; GNN.3 Teacher GNN</td>
+            <td class="right">9 → <strong>16</strong>; 9 → <strong>18</strong></td>
+          </tr>
+          <tr>
+            <td><strong>3</strong></td>
+            <td>Student + Inference</td>
+            <td>GNN.4 Student KD; GNN.5 Inference</td>
+            <td class="right">7 → <strong>20</strong>; 6 → <strong>16</strong></td>
+          </tr>
+          <tr>
+            <td><strong>4</strong></td>
+            <td>Crew + Tests + Backtest</td>
+            <td>GNN.6 Crew AI; GNN.7 Tests; GNN.8 Backtesting</td>
+            <td class="right">4 → <strong>12</strong>; 7 → <strong>9</strong>; 11 → <strong>16</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="commits" class="card">
+      <h2>Commits (branch: <span class="mono">bijjur‑sprint4</span>)</h2>
+      <div class="flex" style="margin-bottom:8px">
+        <input id="commitFilter" class="card" style="flex:1; padding:10px;" placeholder="Filter commits… (e.g., backtest, teacher, graph)" />
+        <span class="note">Source: GitHub commits for this branch</span>
+      </div>
+      <table id="commitTable" aria-label="Commits">
+        <thead>
+          <tr><th>Date</th><th>Commit</th><th>Message</th><th>Sprint</th><th>Link</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>2025‑08‑09</td>
+            <td class="mono">2c8e83a</td>
+            <td>GNN Backtesting code</td>
+            <td>4</td>
+            <td><a href="https://github.com/Vishanth-reddy/Bijjur-AI-Agent-Stock-Prediction/commit/2c8e83a" target="_blank" rel="noopener">view</a></td>
+          </tr>
+          <tr>
+            <td>2025‑08‑09</td>
+            <td class="mono">3471eec</td>
+            <td>Added Crew AI agents code</td>
+            <td>4</td>
+            <td><a href="https://github.com/Vishanth-reddy/Bijjur-AI-Agent-Stock-Prediction/commit/3471eec" target="_blank" rel="noopener">view</a></td>
+          </tr>
+          <tr>
+            <td>2025‑07‑13</td>
+            <td class="mono">def1f51</td>
+            <td>GNN.4 and GNN.5</td>
+            <td>3</td>
+            <td><a href="https://github.com/Vishanth-reddy/Bijjur-AI-Agent-Stock-Prediction/commit/def1f51" target="_blank" rel="noopener">view</a></td>
+          </tr>
+          <tr>
+            <td>2025‑06‑22</td>
+            <td class="mono">b9f97df</td>
+            <td>Add Graph construction and Teacher GNN training code</td>
+            <td>2</td>
+            <td><a href="https://github.com/Vishanth-reddy/Bijjur-AI-Agent-Stock-Prediction/commit/b9f97df" target="_blank" rel="noopener">view</a></td>
+          </tr>
+          <tr>
+            <td>2025‑06‑03</td>
+            <td class="mono">50fca89</td>
+            <td>GNN price load and compute daily price matrix</td>
+            <td>1</td>
+            <td><a href="https://github.com/Vishanth-reddy/Bijjur-AI-Agent-Stock-Prediction/commit/50fca89" target="_blank" rel="noopener">view</a></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="note">Add more rows if new commits land on <span class="mono">bijjur‑sprint4</span>.</div>
+    </section>
+
+    <section id="evidence" class="grid cols-2">
+      <div class="card">
+        <h2>Screenshots</h2>
+        <figure>
+          <img src="1.jpg" alt="Crew AI decision output" style="width:100%; border-radius:12px; border:1px solid var(--border);" />
+          <figcaption>Prediction JSON + Crew AI decision (<span class="mono">1.jpg</span>).</figcaption>
+        </figure>
+        <div style="height:12px"></div>
+        <figure>
+          <img src="2.jpg" alt="Backtest output" style="width:100%; border-radius:12px; border:1px solid var(--border);" />
+          <figcaption>Backtrader backtest summary (<span class="mono">2.jpg</span>).</figcaption>
+        </figure>
+      </div>
+      <div class="card">
+        <h2>Key links</h2>
+        <ul>
+          <li>Repo branch: <a href="https://github.com/Vishanth-reddy/Bijjur-AI-Agent-Stock-Prediction/tree/bijjur-sprint4" target="_blank" rel="noopener">bijjur‑sprint4</a></li>
+          <li>Main pipeline module: <span class="mono">src/UI/gnn.py</span></li>
+          <li>Backtesting runner: <span class="mono">src/Backtesting/gnn_backtest.py</span></li>
+        </ul>
+        <h3>Task‑hours (DOCX)</h3>
+        <p class="note">Drop these files in the same directory to enable downloads.</p>
+        <ul>
+          <li><a href="Bijjur Task hours achieved sprint 1.docx">Sprint 1 hours</a></li>
+          <li><a href="Bijjur Task hours achieved sprint 2.docx">Sprint 2 hours</a></li>
+          <li><a href="Bijjur Task hours achieved sprint 3.docx">Sprint 3 hours</a></li>
+          <li><a href="Bijjur Task hours achieved sprint 4.docx">Sprint 4 hours</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="appendix" class="card">
+      <h2>Appendix</h2>
+      <details open>
+        <summary>Per‑task breakdown</summary>
+        <table>
+          <thead><tr><th>Task</th><th>Description</th><th class="right">Est.</th><th class="right">Actual</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>GNN.1</td><td>Price & Returns Ingestion</td><td class="right">8</td><td class="right">17</td><td><span class="tag ok">Complete</span></td></tr>
+            <tr><td>GNN.2</td><td>Graph Construction</td><td class="right">9</td><td class="right">16</td><td><span class="tag ok">Complete</span></td></tr>
+            <tr><td>GNN.3</td><td>Teacher GNN Development</td><td class="right">9</td><td class="right">18</td><td><span class="tag ok">Complete</span></td></tr>
+            <tr><td>GNN.4</td><td>Student GNN & Distillation</td><td class="right">7</td><td class="right">20</td><td><span class="tag ok">Complete</span></td></tr>
+            <tr><td>GNN.5</td><td>Inference Wrapper</td><td class="right">6</td><td class="right">16</td><td><span class="tag ok">Complete</span></td></tr>
+            <tr><td>GNN.6</td><td>Crew AI Integration</td><td class="right">4</td><td class="right">12</td><td><span class="tag ok">Complete</span></td></tr>
+            <tr><td>GNN.7</td><td>Validation & Testing</td><td class="right">7</td><td class="right">9</td><td><span class="tag ok">Complete</span></td></tr>
+            <tr><td>GNN.8</td><td>Backtesting & Evaluation</td><td class="right">11</td><td class="right">16</td><td><span class="tag ok">Complete</span></td></tr>
+          </tbody>
+        </table>
+      </details>
+      <details>
+        <summary>Full user story (IDs)</summary>
+        <ul>
+          <li>#595 DishFT‑GNN User Story</li>
+          <li>#596 GNN.1 • #615 GNN.2 • #713 GNN.3 • #714 GNN.4 • #715 GNN.5 • #716 GNN.6 • #717 GNN.7 • #718 GNN.8</li>
+        </ul>
+      </details>
+    </section>
+
+    <footer class="container">
+      <div>© <span id="year"></span> Vishanth Reddy Bijjur</div>
+      <div class="note">This page is intentionally concise and factual, focusing on contributions, code, and evidence.</div>
+    </footer>
+  </main>
+
+  <script>
+    // year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // simple commit filter
+    const filter = document.getElementById('commitFilter');
+    const table = document.getElementById('commitTable');
+    filter.addEventListener('input', () => {
+      const q = filter.value.toLowerCase();
+      for (const row of table.tBodies[0].rows) {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(q) ? '' : 'none';
+      }
+    });
+  </script>
+</body>
+</html>
